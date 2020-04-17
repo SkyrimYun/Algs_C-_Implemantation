@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "algorithm": "cpp",
+        "vector": "cpp",
+        "cstddef": "cpp",
+        "xiosbase": "cpp",
+        "list": "cpp",
+        "limits": "cpp"
+    }
+}
