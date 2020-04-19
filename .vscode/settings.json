@@ -5,6 +5,9 @@
         "cstddef": "cpp",
         "xiosbase": "cpp",
         "list": "cpp",
-        "limits": "cpp"
+        "limits": "cpp",
+        "iosfwd": "cpp",
+        "xlocale": "cpp",
+        "xstring": "cpp"
     }
 }
