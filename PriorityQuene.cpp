@@ -147,8 +147,8 @@ public:
         {
             int j = 2 * k;
             // get the larger child
-            //if (2 * k + 1 <= size)
-            if (compare(arr[2 * k], arr[2 * k + 1]))
+            // j+1 needs <= size; thus j<size
+            if (j < size && compare(arr[2 * k], arr[2 * k + 1]))
                 j++;
             if (compare(arr[j], arr[k]))
                 break;
@@ -271,7 +271,7 @@ struct cmpTrans
 int main()
 try
 {
-    MaxPQ<Transaction, cmpTrans> pq(16, cmpTrans("compare by name"));
+    MaxPQ<Transaction, cmpTrans> pq(16, cmpTrans("compare by value"));
     ifstream ifs("tinyBatch.txt");
     if (!ifs)
         throw runtime_error("cannot open file!");

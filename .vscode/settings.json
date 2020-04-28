@@ -9,6 +9,8 @@
         "iosfwd": "cpp",
         "xlocale": "cpp",
         "xstring": "cpp",
-        "stdexcept": "cpp"
+        "stdexcept": "cpp",
+        "fstream": "cpp",
+        "utility": "cpp"
     }
 }
