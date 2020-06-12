@@ -1,7 +1,9 @@
 #include <iostream>
 #include <vector>
+#include <fstream>
 using namespace std;
 
+// red black binary search tree
 template <class Key, class Value>
 class RBBST
 {
@@ -357,10 +359,297 @@ public:
         return k;
     }
 };
+
+// directed edge with weight
+class Edge
+{
+private:
+    int v1;
+    int v2;
+    double Weight;
+
+public:
+    Edge() {}
+    Edge(int v, int w, double weight) : v1(v), v2(w), Weight(weight) {}
+
+    int from()
+    {
+        return v1;
+    }
+
+    int to()
+    {
+        return v2;
+    }
+
+    friend ostream &operator<<(ostream &ost, const Edge &e)
+    {
+        ost << e.v1 << "-" << e.v2 << " " << e.Weight << endl;
+        return ost;
+    }
+
+    double weight()
+    {
+        return Weight;
+    }
+};
+
+// edge weighted diagraph
+class EWD
+{
+private:
+    int vertex;
+    int edge;
+    vector<vector<Edge>> ADJ;
+    vector<Edge> EDGES;
+
+public:
+    EWD() {}
+    EWD(istream &ist)
+    {
+        ist >> vertex;
+        ist >> edge;
+        ADJ.resize(vertex);
+
+        int v, w;
+        double weight;
+        int count = 0;
+        while (!ist.eof())
+        {
+            ist >> v >> w >> weight;
+            Edge e(v, w, weight);
+            addEdge(e);
+            count++;
+        }
+        if (count != edge)
+            throw runtime_error("the input Edge number is wrong!");
+    }
+    EWD(int v)
+    {
+        vertex = v;
+        ADJ.resize(vertex);
+    }
+
+    void addEdge(Edge e)
+    {
+        int v = e.from();
+        ADJ[v].push_back(e);
+        EDGES.push_back(e);
+    }
+
+    vector<Edge> adj(int v)
+    {
+        return ADJ[v];
+    }
+
+    int V()
+    {
+        return vertex;
+    }
+
+    int E()
+    {
+        return edge;
+    }
+
+    vector<Edge> edges()
+    {
+        return EDGES;
+    }
+};
+
+//
+class Toposort
+{
+private:
+    // marked[v] = true if v connected to s
+    vector<bool> marked;
+    vector<int> order;
+
+    void dfs(EWD G, int v)
+    {
+        marked[v] = true;
+        for (Edge e : G.adj(v))
+        {
+            int w = e.to();
+            if (!marked[w])
+            {
+                dfs(G, w);
+            }
+        }
+        order.push_back(v);
+    }
+
+public:
+    Toposort(EWD G)
+    {
+        marked = vector<bool>(G.V());
+
+        for (int v = 0; v < G.V(); v++)
+        {
+            if (!marked[v])
+                dfs(G, v);
+        }
+    }
+
+    vector<int> reversePost()
+    {
+        vector<int> reverserOrder;
+        for (int i = order.size() - 1; i >= 0; i--)
+        {
+            reverserOrder.push_back(order[i]);
+        }
+        return reverserOrder;
+    }
+};
+
+// can handle cycle; but not negative edge
+class DijkstraSP
+{
+private:
+    // the path s to v
+    vector<vector<Edge>> pathto;
+    // last edge on the SP to v
+    vector<Edge> edgeto;
+    // distance of the SP
+    vector<double> distto;
+    RBBST<int, double> pq;
+
+    void relax(Edge e)
+    {
+        int v = e.from();
+        int w = e.to();
+        if (distto[w] > distto[v] + e.weight())
+        {
+            distto[w] = distto[v] + e.weight();
+            edgeto[w] = e;
+            pathto[w] = pathto[v];
+            pathto[w].push_back(e);
+            pq.put(w, distto[w]); //update pq
+        }
+    }
+
+public:
+    DijkstraSP(EWD G, int s)
+    {
+        pathto.resize(G.V());
+        distto.resize(G.V());
+        edgeto.resize(G.V());
+
+        // the initial distance to any vertex should be large enough (infinite)
+        for (int i = 0; i < distto.size(); i++)
+        {
+            distto[i] = 100000;
+        }
+        distto[s] = 0.0;
+
+        pq.put(s, 0);
+        while (!pq.isEmpty())
+        {
+            // based on order, pop out vertex
+            // relax all adjacent edges
+            int v = pq.min();
+            pq.deleteMin();
+            for (Edge e : G.adj(v))
+            {
+                relax(e);
+            }
+        }
+    }
+
+    double distTo(int v)
+    {
+        return distto[v];
+    }
+
+    vector<Edge> pathTo(int v)
+    {
+        return pathto[v];
+    }
+
+    bool hasPathTo(int v)
+    {
+        return !pathto[v].empty();
+    }
+};
+
+// if no cycle; can handle negative edge
+class AcyclicSP
+{
+private:
+    vector<Edge> edgeto;
+    vector<vector<Edge>> pathto;
+    vector<double> distto;
+
+    void relax(Edge e)
+    {
+        int v = e.from();
+        int w = e.to();
+        if (distto[w] > distto[v] + e.weight())
+        {
+            distto[w] = distto[v] + e.weight();
+            edgeto[w] = e;
+
+            pathto[w] = pathto[v];
+            pathto[w].push_back(e);
+        }
+    }
+
+public:
+    AcyclicSP(EWD G, int s)
+    {
+        edgeto.resize(G.V());
+        pathto.resize(G.V());
+        distto.resize(G.V());
+
+        for (int i = 0; i < distto.size(); i++)
+        {
+            distto[i] = 100000;
+        }
+        distto[s] = 0;
+
+        // vertex pop out order based on topo order
+        Toposort top(G);
+
+        for (int v : top.reversePost())
+        {
+            for (Edge e : G.adj(v))
+            {
+                relax(e);
+            }
+        }
+    }
+
+    vector<Edge> pathTo(int v)
+    {
+        return pathto[v];
+    }
+
+    double distTo(int v)
+    {
+        return distto[v];
+    }
+};
+
 int main()
 try
 {
-    /* code */
+    ifstream ifs("tinyEWD.txt");
+    if (!ifs)
+        throw runtime_error("cannot open file");
+    EWD G(ifs);
+
+    AcyclicSP sp(G, 0);
+
+    for (int v = 0; v < G.V(); v++)
+    {
+        cout << 0 << " to " << v << " (" << sp.distTo(v) << "): " << endl;
+        for (Edge e : sp.pathTo(v))
+        {
+            cout << e;
+        }
+        cout << '\n';
+    }
 }
 catch (const std::exception &e)
 {

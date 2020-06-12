@@ -3,6 +3,8 @@
 #include <vector>
 using namespace std;
 
+// self-writen priority quene
+// default compare function is less
 template <class T, class Comp = less<T>>
 class PQ
 {
@@ -84,7 +86,8 @@ public:
     }
 };
 
-// even quicker implementation using weighted-tree structure
+// union-find struture
+// to check if there is a cycle in MST
 class WeightedQuickUF
 {
 private:
@@ -147,6 +150,7 @@ public:
     }
 };
 
+// undirected wieghted edge
 class Edge
 {
 private:
@@ -184,6 +188,7 @@ public:
     }
 };
 
+// Edge Weighted Graph
 class EWG
 {
 private:
@@ -249,6 +254,8 @@ public:
     }
 };
 
+// compare function of edges for priority quene
+// put edges in ascending order based on weight
 struct edgeCmp
 {
     edgeCmp() {}
@@ -262,6 +269,7 @@ struct edgeCmp
     }
 };
 
+// Kruskal algorithm implementation
 class KruskalMST
 {
 private:
@@ -270,16 +278,19 @@ private:
 public:
     KruskalMST(EWG G)
     {
+        // put edges into the PQ in ascending order of weight
         PQ<Edge, edgeCmp> epq(G.E());
         for (Edge e : G.edges())
         {
             epq.enquene(e);
         }
+
         WeightedQuickUF uf(G.V());
 
-        // mst should have v-1 edges
+        // MST should have v-1 edges
         while (!epq.isEmpty() && mst.size() != G.V() - 1)
         {
+            // add edge to MST if no cycle
             Edge e = epq.dequene();
             int v = e.either();
             int w = e.other(v);
@@ -307,6 +318,7 @@ public:
     }
 };
 
+// Prim algorithm implementation
 class PrimMST
 {
 private:
@@ -315,6 +327,8 @@ private:
     vector<Edge> mst;
     vector<Edge> adj;
 
+    // mark the vertex v
+    // for all the adjacent vertex of v which are not visited, add the edge to PQ
     void visit(EWG G, int v)
     {
         marked[v] = true;
@@ -332,6 +346,7 @@ public:
         epq = PQ<Edge, edgeCmp>(G.E());
         marked.resize(G.V());
 
+        // start with vertex 0
         visit(G, 0);
 
         while (!epq.isEmpty() && mst.size() != G.V() - 1)
@@ -339,6 +354,7 @@ public:
             Edge e = epq.dequene();
             int v = e.either();
             int w = e.other(v);
+            // add edge to MST only if one endpoint is in MST
             if (marked[v] && marked[w])
                 continue;
             mst.push_back(e);
