@@ -113,7 +113,7 @@ int partition(vector<T>& arr, int left, int right) {
     int pivot = arr[left];
     while (left < right) {
         // sacn j from right to left if s[j]>s[l]
-        while (left < right && arr[right] >= pivot) {
+        while (arr[right] > pivot) {
             right--;
         }
         if (left < right) {
@@ -121,7 +121,7 @@ int partition(vector<T>& arr, int left, int right) {
             left++;
         }
         // scan i from left to right if s[i]<s[l]
-        while (left < right && arr[left] < pivot) {
+        while (arr[left] < pivot) {
             left++;
         }
         if (left < right) {
@@ -140,25 +140,6 @@ void quickSort(std::vector<T> &s, int l, int h) {
         quickSort(s, l, i - 1);
         quickSort(s, i + 1, h);
     }
-}
-
-void quickSortLeetCode(vector<int>& nums, int l, int r) {
-    if (l == r) {
-        return;
-    }
-
-    int partition = nums[l];
-    int i = l - 1;
-    int j = r + 1;
-    while (i < j) {
-        do i++; while (nums[i] < partition);
-        do j--; while (nums[j] > partition);
-        if (i < j) {
-            swap(nums[i], nums[j]);
-        }
-    }
-    quickSortLeetCode(nums, l, j);
-    quickSortLeetCode(nums, j + 1, r);
 }
 
 //平均时间复杂度 2nlogn
@@ -201,7 +182,7 @@ public:
 
 int main() {
 
-    vector<int> d = {1,1,1,1,1,9,8,7,6,10,5,4};
+    vector<int> d = {1,1,1,1,1,5,4,3,2,9,8,7,6};
     cout << "输入数组" << endl;
     for (int i = 0; i < d.size(); i++) {
         cout << d[i] << " ";
