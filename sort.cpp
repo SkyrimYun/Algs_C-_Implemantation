@@ -109,52 +109,56 @@ void mergesort(vector<T> &arr, int left, int right) {
 //最坏时间复杂度 n^2
 //最优时间复杂度 nlogn
 template<class T>
-int partition(T arr[], int left, int right) {
-    int i = left, j = right, x = arr[left];
-    while (i < j) {
-        // scan i from left to right if s[i]<s[l]
-        while (i < j && arr[i] < x)
-            i++;
-        if (i < j)
-            arr[j--] = arr[i];
-        // sacn j from right to left if s[j]>s[l]
-        while (i < j && arr[j] >= x)
-            j--;
-        if (i < j)
-            arr[i++] = arr[j];
-    }
-    arr[i] = x;
-    return i;
-}
-
-template<typename T>
-int threeWayPartition(std::vector<T> &arr, int left, int right) {
-    int i = left + 1;
+int partition(vector<T>& arr, int left, int right) {
     int pivot = arr[left];
-
-    while (i <= right) {
-        if (arr[i] > pivot) {
-            swap(arr[i], arr[right]);
+    while (left < right) {
+        // sacn j from right to left if s[j]>s[l]
+        while (left < right && arr[right] >= pivot) {
             right--;
-        } else if (arr[i] == pivot) {
-            i++;
-        } else {
-            swap(arr[i], arr[left]);
+        }
+        if (left < right) {
+            swap(arr[left], arr[right]);
             left++;
         }
+        // scan i from left to right if s[i]<s[l]
+        while (left < right && arr[left] < pivot) {
+            left++;
+        }
+        if (left < right) {
+            swap(arr[left], arr[right]);
+            right--;
+        }
     }
-
-    return i - 1;
+    return left;
 }
 
 template<typename T>
 void quickSort(std::vector<T> &s, int l, int h) {
     if (l < h) {
-        int i = threeWayPartition(s, l, h);
+        int i = partition(s, l, h);
 
         quickSort(s, l, i - 1);
         quickSort(s, i + 1, h);
     }
+}
+
+void quickSortLeetCode(vector<int>& nums, int l, int r) {
+    if (l == r) {
+        return;
+    }
+
+    int partition = nums[l];
+    int i = l - 1;
+    int j = r + 1;
+    while (i < j) {
+        do i++; while (nums[i] < partition);
+        do j--; while (nums[j] > partition);
+        if (i < j) {
+            swap(nums[i], nums[j]);
+        }
+    }
+    quickSortLeetCode(nums, l, j);
+    quickSortLeetCode(nums, j + 1, r);
 }
 
 //平均时间复杂度 2nlogn
@@ -197,7 +201,7 @@ public:
 
 int main() {
 
-    vector<int> d = {3,2,1,5,6,4};
+    vector<int> d = {1,1,1,1,1,9,8,7,6,10,5,4};
     cout << "输入数组" << endl;
     for (int i = 0; i < d.size(); i++) {
         cout << d[i] << " ";
