@@ -3,9 +3,9 @@
 
 using namespace std;
 
-//å¹³å‡æ—¶é—´å¤æ‚åº¦  O(n^{2})
-//æœ€åæ—¶é—´å¤æ‚åº¦  O(n^{2})
-//æœ€ä¼˜æ—¶é—´å¤æ‚åº¦  O(n^{2})
+//Æ½¾ùÊ±¼ä¸´ÔÓ¶È  O(n^{2})
+//×î»µÊ±¼ä¸´ÔÓ¶È  O(n^{2})
+//×îÓÅÊ±¼ä¸´ÔÓ¶È  O(n^{2})
 template<typename T>
 void bubblesort(T arr[], int len) {
     for (int i = 0; i < len - 1; i++) {
@@ -16,18 +16,18 @@ void bubblesort(T arr[], int len) {
     }
 }
 
-//å¹³å‡æ—¶é—´å¤æ‚åº¦  O(n^{2})
-//æœ€åæ—¶é—´å¤æ‚åº¦  O(n^{2})
-//æœ€ä¼˜æ—¶é—´å¤æ‚åº¦  O(n^{2})
+//Æ½¾ùÊ±¼ä¸´ÔÓ¶È  O(n^{2})
+//×î»µÊ±¼ä¸´ÔÓ¶È  O(n^{2})
+//×îÓÅÊ±¼ä¸´ÔÓ¶È  O(n^{2})
 template<typename T>
 void selectionSort(T a[], int len) {
     for (int i = 0; i < len - 1; i++) {
         int min = i;
-        for (int j = i + 1; j < len; j++)     //èµ°è¨ªæœªæ’åºçš„å…ƒç´ 
+        for (int j = i + 1; j < len; j++)     //×ßÔLÎ´ÅÅĞòµÄÔªËØ
         {
-            if (a[j] < a[min])    //æ‰¾åˆ°ç›®å‰æœ€å°å€¼
+            if (a[j] < a[min])    //ÕÒµ½Ä¿Ç°×îĞ¡Öµ
             {
-                min = j;    //ç´€éŒ„æœ€å°å€¼
+                min = j;    //¼oä›×îĞ¡Öµ
             }
         }
         if (min != i) {
@@ -36,9 +36,9 @@ void selectionSort(T a[], int len) {
     }
 }
 
-//å¹³å‡æ—¶é—´å¤æ‚åº¦  O(n^{2})
-//æœ€åæ—¶é—´å¤æ‚åº¦  O(n^{2})
-//æœ€ä¼˜æ—¶é—´å¤æ‚åº¦  O(n)
+//Æ½¾ùÊ±¼ä¸´ÔÓ¶È  O(n^{2})
+//×î»µÊ±¼ä¸´ÔÓ¶È  O(n^{2})
+//×îÓÅÊ±¼ä¸´ÔÓ¶È  O(n)
 template<typename T>
 void insertsort(T arr[], int len) {
     for (int i = 1; i < len; i++) {
@@ -52,9 +52,9 @@ void insertsort(T arr[], int len) {
     }
 }
 
-//å¹³å‡æ—¶é—´å¤æ‚åº¦ nlogn
-//æœ€åæ—¶é—´å¤æ‚åº¦ nlogn
-//æœ€ä¼˜æ—¶é—´å¤æ‚åº¦ nlogn
+//Æ½¾ùÊ±¼ä¸´ÔÓ¶È nlogn
+//×î»µÊ±¼ä¸´ÔÓ¶È nlogn
+//×îÓÅÊ±¼ä¸´ÔÓ¶È nlogn
 template<class T>
 void merge(vector<T> &arr, int left, int mid, int right) {
     // smallest case: left=mid<right
@@ -105,9 +105,9 @@ void mergesort(vector<T> &arr, int left, int right) {
     }
 }
 
-//å¹³å‡æ—¶é—´å¤æ‚åº¦ nlogn
-//æœ€åæ—¶é—´å¤æ‚åº¦ n^2
-//æœ€ä¼˜æ—¶é—´å¤æ‚åº¦ nlogn
+//Æ½¾ùÊ±¼ä¸´ÔÓ¶È nlogn
+//×î»µÊ±¼ä¸´ÔÓ¶È n^2
+//×îÓÅÊ±¼ä¸´ÔÓ¶È nlogn
 template<class T>
 int partition(vector<T>& arr, int left, int right) {
     int pivot = arr[left];
@@ -142,40 +142,57 @@ void quickSort(std::vector<T> &s, int l, int h) {
     }
 }
 
-//å¹³å‡æ—¶é—´å¤æ‚åº¦ 2nlogn
-//æœ€åæ—¶é—´å¤æ‚åº¦ 2nlogn
-//æœ€ä¼˜æ—¶é—´å¤æ‚åº¦ nlogn
+//Æ½¾ùÊ±¼ä¸´ÔÓ¶È nlogn
+//×î»µÊ±¼ä¸´ÔÓ¶È nlogn
+//×îÓÅÊ±¼ä¸´ÔÓ¶È nlogn
 template<class T>
 class Heap {
 private:
-    // with all arr[] operation the index needs to minus 1 becuase in heap tree the index begins with 1 not 0
-    static void sink(T &arr, int k, int size) {
-        while (2 * k <= size) {
-            int j = 2 * k;
+    // ÏÂ³Á£»¹ËÃûË¼Òå£¬ÔÚheap treeÖĞ°ÑÖ¸¶¨µÄparentIdxÑØ×ÅÊ÷ÏÂ³Áµ½ÕıÈ·µÄÎ»ÖÃ
+    static void sink(T &arr, int parentIdx, int size) {
+        while (2 * parentIdx + 1 < size) {
+            // get child node index
+            int leftChildIdx = 2 * parentIdx + 1;
+            int rightChildIdx = leftChildIdx + 1;
+
             // get the larger child
-            if (2 * k + 1 <= size)
-                if (arr[2 * k - 1] < arr[2 * k + 1 - 1])
-                    j++;
-            if (arr[j - 1] < arr[k - 1])
+            int maxChildIdx = leftChildIdx;
+            if (rightChildIdx <= size) {
+                if (arr[leftChildIdx] < arr[rightChildIdx]) {
+                    maxChildIdx++;
+                }
+            }
+
+            // compare child and parent
+            // if parent > child, which is correct; break
+            if (arr[maxChildIdx] < arr[parentIdx]) {
                 break;
-            swap(arr[k - 1], arr[j - 1]);
-            k = j;
+            }
+            // else, swap parent and child
+            swap(arr[parentIdx], arr[maxChildIdx]);
+            parentIdx = maxChildIdx;
         }
     }
 
 public:
-    Heap() {}
+    Heap() = default;
 
     static void sort(T &arr) {
         int size = arr.size();
+
         // first pass; heap construction
-        for (int k = size / 2; k >= 1; k--)
-            sink(arr, k, size);
-        // second pass; sortdown
-        while (size > 1) {
-            swap(arr[1 - 1], arr[size - 1]);
+        // loop all the parent nodes; from the last parent node, to the root
+        for (int parentIdx = size / 2; parentIdx >= 0; parentIdx--) {
+            sink(arr, parentIdx, size);
+        }
+
+        // second pass; sort down
+        // ´ËÊ±£¬Êı×éÖĞ×î´óµÄÖµ±ØÈ»ÔÚroot£»°ÑrootºÍ¶ÓÁĞÎ²²¿µÄÔªËØ½»»»£¬£¬¹Ì¶¨Î²²¿ÔªËØ
+        // È»ºóÔÙ¶ÔĞÂroot×öÏÂ³Á²Ù×÷£¬¾Í¿ÉÒÔµÃµ½ÏÂÒ»¸ö×î´óÖµ£¬Ñ­»·Íù¸´
+        while (size > 0) {
+            swap(arr[0], arr[size - 1]);
             size--;
-            sink(arr, 1, size);
+            sink(arr, 0, size);
         }
     }
 };
@@ -183,12 +200,12 @@ public:
 int main() {
 
     vector<int> d = {1,1,1,1,1,5,4,3,2,9,8,7,6};
-    cout << "è¾“å…¥æ•°ç»„" << endl;
+    cout << "ÊäÈëÊı×é" << endl;
     for (int i = 0; i < d.size(); i++) {
         cout << d[i] << " ";
     }
-    quickSort(d, 0, d.size() - 1);
-    cout << "æ’åºåç»“æœï¼š";
+    Heap<vector<int>>::sort(d);
+    cout << "ÅÅĞòºó½á¹û£º";
     for (int i = 0; i < d.size(); i++) {
         cout << d[i] << " ";
     }
