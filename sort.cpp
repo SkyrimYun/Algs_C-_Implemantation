@@ -197,16 +197,16 @@ public:
     }
 };
 
-int main() {
-
-    vector<int> d = {1,1,1,1,1,5,4,3,2,9,8,7,6};
-    cout << "输入数组" << endl;
-    for (int i = 0; i < d.size(); i++) {
-        cout << d[i] << " ";
-    }
-    Heap<vector<int>>::sort(d);
-    cout << "排序后结果：";
-    for (int i = 0; i < d.size(); i++) {
-        cout << d[i] << " ";
-    }
-}
+//int main() {
+//
+//    vector<int> d = {1,1,1,1,1,5,4,3,2,9,8,7,6};
+//    cout << "输入数组" << endl;
+//    for (int i = 0; i < d.size(); i++) {
+//        cout << d[i] << " ";
+//    }
+//    Heap<vector<int>>::sort(d);
+//    cout << "排序后结果：";
+//    for (int i = 0; i < d.size(); i++) {
+//        cout << d[i] << " ";
+//    }
+//}

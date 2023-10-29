@@ -129,12 +129,13 @@ private:
             return make_shared<Node>(key, val);
         }
 
-        if (key > x->key)
+        if (key > x->key) {
             x->right = put(x->right, key, val);
-        else if (key < x->key)
+        } else if (key < x->key) {
             x->left = put(x->left, key, val);
-        else
-            x->val = val;
+        } else {
+            x->value = val;
+        }
 
         x->count = 1 + size(x->left) + size(x->right);
 
@@ -192,7 +193,7 @@ private:
         }
     }
 
-    int size(Node* x) {
+    int size(NodePtr x) {
         if (x == nullptr) {
             return 0;
         }
@@ -219,9 +220,11 @@ private:
             return Key();
         }
 
-        if (k > rank(x->key)) {
+        int rankK = rank(x->key);
+
+        if (k > rankK) {
             return select(x->right, k);
-        } else if (k < rank(x->key)) {
+        } else if (k < rankK) {
             return select(x->left, k);
         } else {
             return x->key;
@@ -318,5 +321,17 @@ private:
 
     NodePtr root = nullptr;
 };
+
+int main()
+{
+    BST<int, int> map;
+    map.put(1,4);
+    map.put(2,4);
+    map.put(3,4);
+    map.put(4,4);
+    map.put(5,4);
+
+    map.select(4);
+}
 
 
